@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Report — FusionGroup</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header Section -->
+        <header class="main-header">
+            <div class="header-left">
+                <div class="logo-container">
+                    <img src="logo.png" alt="Fusion Group Logo" class="logo-img">
+                    <h1>Daily Report — FusionGroup</h1>
+                </div>
+            </div>
+            <div class="header-right">
+                <input type="date" id="reportDate" class="header-input">
+                <select id="dayType" class="header-input">
+                    <option value="Normal day">Normal day</option>
+                    <option value="Campaign day">Campaign day</option>
+                    <option value="Weekend">Weekend</option>
+                </select>
+                <input type="text" id="preparedBy" placeholder="Prepared by" class="header-input">
+            </div>
+        </header>
+
+        <main class="content">
+            <!-- SECTION 1 -->
+            <section class="module-section">
+                <div class="section-banner blue-banner">
+                    <i data-lucide="bar-chart-2"></i> SECTION 1 — PERFORMANCE SUMMARY
+                </div>
+                <div class="perf-grid">
+                    <div class="perf-card">
+                        <label>Revenue (VND)</label>
+                        <input type="text" id="revenue" placeholder="0">
+                        <input type="text" id="revenueVs" placeholder="vs yesterday (%)" class="sub-input">
+                    </div>
+                    <div class="perf-card">
+                        <label>Ad spend (VND)</label>
+                        <input type="text" id="adSpend" placeholder="0">
+                        <input type="text" id="adSpendVs" placeholder="vs yesterday (%)" class="sub-input">
+                    </div>
+                    <div class="perf-card">
+                        <label>ROAS</label>
+                        <input type="number" id="roas" placeholder="0" step="0.1">
+                        <span class="warning-text" id="roasWarning">Critical (< 5.5)</span>
+                    </div>
+                    <div class="perf-card">
+                        <label>Orders</label>
+                        <input type="text" id="orders" placeholder="0">
+                        <input type="text" id="ordersVs" placeholder="vs yesterday (%)" class="sub-input">
+                    </div>
+                    <div class="perf-card">
+                        <label>CS response time</label>
+                        <input type="text" id="csResponse" placeholder="e.g. 3.2 min">
+                    </div>
+                    <div class="perf-card">
+                        <label>KOC recruited</label>
+                        <input type="text" id="kocRecruited" placeholder="0 / target">
+                        <input type="text" id="kocNote" placeholder="note" class="sub-input">
+                    </div>
+                </div>
+                <textarea id="perfNotes" placeholder="Additional performance notes (promotions running, platform issues, campaign highlights...)" class="wide-textarea"></textarea>
+            </section>
+
+            <!-- SECTION 2 -->
+            <section class="module-section">
+                <div class="section-banner brown-banner">
+                    <i data-lucide="link"></i> SECTION 2 — CROSS-DEPARTMENT COORDINATION
+                </div>
+                <div class="coord-grid">
+                    <div class="coord-card">
+                        <span class="badge blue-badge">Media → Marketing / Sales</span>
+                        <textarea id="coordMedia" placeholder="e.g. Marketing HN to place on Shopee shop by 09:00 tomorrow."></textarea>
+                    </div>
+                    <div class="coord-card">
+                        <span class="badge green-badge">Marketing → Online Sales</span>
+                        <textarea id="coordMkt" placeholder="e.g. Today's Dinner sampling event recap sent — Online Sales to sync"></textarea>
+                    </div>
+                    <div class="coord-card">
+                        <span class="badge yellow-badge">Online Sales → Media / Marketing</span>
+                        <textarea id="coordSales" placeholder="e.g. ROAS below threshold on FINE brand — need Media to review"></textarea>
+                    </div>
+                    <div class="coord-card">
+                        <span class="badge pink-badge">CS Team → All relevant teams</span>
+                        <textarea id="coordCS" placeholder="e.g. 12 complaints on ALO dry food texture — escalate to R&D. SLA"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3 -->
+            <section class="module-section">
+                <div class="section-banner dark-blue-banner">
+                    <i data-lucide="check-square"></i> SECTION 3 — ACTION ITEMS FOR TOMORROW
+                </div>
+                <div class="action-grid">
+                    <div class="action-card">
+                        <span class="tag-badge blue-tag">Media Marketing</span>
+                        <textarea id="actionMedia" placeholder="- Review ad creatives..."></textarea>
+                    </div>
+                    <div class="action-card">
+                        <span class="tag-badge green-tag">Marketing (HN / HCM)</span>
+                        <textarea id="actionMkt" placeholder="- Execute Today's Dinner..."></textarea>
+                    </div>
+                    <div class="action-card">
+                        <span class="tag-badge yellow-tag">Online Sales</span>
+                        <textarea id="actionSales" placeholder="- Adjust bid strategy..."></textarea>
+                    </div>
+                    <div class="action-card">
+                        <span class="tag-badge pink-tag">CS Team</span>
+                        <textarea id="actionCS" placeholder="- Compile complaint tags..."></textarea>
+                    </div>
+                </div>
+                <textarea id="managementNotes" placeholder="Escalation / decisions needed from management (optional)..." class="wide-textarea"></textarea>
+            </section>
+
+            <!-- Actions -->
+            <div class="floating-actions">
+                <button id="sendEmail" class="fab-btn secondary-btn">
+                    <i data-lucide="mail"></i> Send Email
+                </button>
+                <button id="copyMarkdown" class="fab-btn">
+                    <i data-lucide="copy"></i> Copy Markdown
+                </button>
+            </div>
+        </main>
+    </div>
+    <script src="main.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

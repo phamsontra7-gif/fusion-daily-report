@@ -4,6 +4,69 @@ document.addEventListener('DOMContentLoaded', () => {
     const dayType = document.getElementById('dayType');
     const preparedBy = document.getElementById('preparedBy');
 
+    // ── Recipients Manager ──────────────────────────────────────
+    const STORAGE_KEY = 'fg_recipients';
+    const newRecipientInput = document.getElementById('newRecipientInput');
+    const addRecipientBtn = document.getElementById('addRecipientBtn');
+    const recipientsList = document.getElementById('recipientsList');
+
+    function getRecipients() {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        return stored ? JSON.parse(stored) : null; // null = chưa có, sẽ dùng từ config
+    }
+
+    function saveRecipients(list) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    }
+
+    function renderRecipients(list) {
+        recipientsList.innerHTML = '';
+        if (list.length === 0) {
+            recipientsList.innerHTML = '<span style="color:#94a3b8;font-size:13px;">Chưa có email nào. Hãy thêm người nhận.</span>';
+            return;
+        }
+        list.forEach((email, idx) => {
+            const tag = document.createElement('div');
+            tag.style.cssText = 'display:inline-flex;align-items:center;gap:6px;background:#ede9fe;color:#5b21b6;padding:6px 12px;border-radius:20px;font-size:13px;font-weight:500;';
+            tag.innerHTML = `<i data-lucide="mail" style="width:14px;height:14px;"></i>${email}
+                <button data-idx="${idx}" style="background:none;border:none;cursor:pointer;color:#7c3aed;padding:0;display:flex;align-items:center;" title="Xóa">
+                    <i data-lucide="x" style="width:14px;height:14px;"></i>
+                </button>`;
+            tag.querySelector('button').addEventListener('click', () => {
+                const current = getRecipients() || [];
+                current.splice(idx, 1);
+                saveRecipients(current);
+                renderRecipients(current);
+                lucide.createIcons();
+            });
+            recipientsList.appendChild(tag);
+        });
+        lucide.createIcons();
+    }
+
+    function addRecipient() {
+        const email = newRecipientInput.value.trim();
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            newRecipientInput.style.borderColor = '#ef4444';
+            setTimeout(() => newRecipientInput.style.borderColor = '#e2e8f0', 1500);
+            return;
+        }
+        const current = getRecipients() || [];
+        if (current.includes(email)) {
+            alert('Email này đã có trong danh sách!');
+            return;
+        }
+        current.push(email);
+        saveRecipients(current);
+        renderRecipients(current);
+        newRecipientInput.value = '';
+        newRecipientInput.focus();
+    }
+
+    addRecipientBtn.addEventListener('click', addRecipient);
+    newRecipientInput.addEventListener('keydown', e => { if (e.key === 'Enter') addRecipient(); });
+    // ────────────────────────────────────────────────────────────
+
     // Section 1
     const revenue = document.getElementById('revenue');
     const revenueVs = document.getElementById('revenueVs');
@@ -175,7 +238,7 @@ ${managementNotes.value || 'None.'}
         </div>`;
     }
 
-    // Initialize EmailJS
+    // Initialize EmailJS + Recipients
     fetch('email_config.json')
         .then(res => res.json())
         .then(config => {
@@ -183,6 +246,14 @@ ${managementNotes.value || 'None.'}
                 emailjs.init(config.emailjs.public_key);
             }
             window.emailConfig = config;
+
+            // Load recipients: localStorage > config defaults
+            let stored = getRecipients();
+            if (stored === null) {
+                stored = config.recipients || [];
+                saveRecipients(stored);
+            }
+            renderRecipients(stored);
         })
         .catch(err => console.error('Failed to load email_config.json:', err));
 
@@ -200,9 +271,17 @@ ${managementNotes.value || 'None.'}
         sendEmailBtn.disabled = true;
 
         const htmlContent = generateHTML();
-        const recipients = config.recipients || [];
+        const recipients = getRecipients() || config.recipients || [];
         const reportDateVal = reportDate.value || new Date().toLocaleDateString('vi-VN');
         const subjectVal = `${config.subject || 'FusionGroup Daily Report'} - ${reportDateVal}`;
+
+        if (recipients.length === 0) {
+            alert('Chưa có email người nhận! Hãy thêm ít nhất 1 email vào danh sách.');
+            sendEmailBtn.innerHTML = originalHTML;
+            sendEmailBtn.disabled = false;
+            lucide.createIcons();
+            return;
+        }
 
         try {
             // Gửi đồng loạt cho từng người trong danh sách

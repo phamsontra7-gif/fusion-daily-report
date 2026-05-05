@@ -9,6 +9,8 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
+
+
 <body>
     <div class="app-container">
         <!-- Header Section -->
@@ -119,6 +121,22 @@
                     </div>
                 </div>
                 <textarea id="managementNotes" placeholder="Escalation / decisions needed from management (optional)..." class="wide-textarea"></textarea>
+            </section>
+
+            <!-- Recipients Manager Section -->
+            <section class="module-section" id="recipients-section">
+                <div class="section-banner" style="background: linear-gradient(90deg,#6366f1,#8b5cf6);">
+                    <i data-lucide="users"></i> EMAIL RECIPIENTS
+                </div>
+                <div style="padding: 16px 20px;">
+                    <div style="display:flex; gap:10px; margin-bottom:14px;">
+                        <input type="email" id="newRecipientInput" placeholder="Nhập email người nhận..." style="flex:1; padding:10px 14px; border:1.5px solid #e2e8f0; border-radius:8px; font-size:14px; outline:none; font-family:inherit;">
+                        <button id="addRecipientBtn" style="padding:10px 18px; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:white; border:none; border-radius:8px; font-size:14px; cursor:pointer; font-weight:600; display:flex; align-items:center; gap:6px;">
+                            <i data-lucide="plus"></i> Thêm
+                        </button>
+                    </div>
+                    <div id="recipientsList" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
+                </div>
             </section>
 
             <!-- Actions -->

@@ -1,8 +1,8 @@
 {
   "emailjs": {
-    "service_id": "YOUR_SERVICE_ID",
-    "template_id": "YOUR_TEMPLATE_ID",
-    "public_key": "YOUR_PUBLIC_KEY"
+    "service_id": "service_m0bvc65",
+    "template_id": "template_wxqrp6c",
+    "public_key": "SPv-RjUST3IarXRBt"
   },
   "recipients": [
     "trapts@fusiongroup.vn",

@@ -346,4 +346,29 @@ ${managementNotes.value || 'None.'}
             warning.textContent = 'Healthy (≥ 5.5)';
         }
     });
+
+    // ── Auto Scheduler ──────────────────────────────────────────
+    let lastSentDate = null;
+    setInterval(() => {
+        const schedule = JSON.parse(localStorage.getItem('fg_schedule') || '{}');
+        if (!schedule.enabled || !schedule.time) return;
+
+        const now = new Date();
+        const currentHourMin = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+        const currentDate = now.toLocaleDateString('vi-VN');
+
+        if (currentHourMin === schedule.time && lastSentDate !== currentDate) {
+            console.log('Triggering auto-send at', currentHourMin);
+            lastSentDate = currentDate; // Ngăn gửi nhiều lần trong cùng 1 phút
+            
+            // Hiện thông báo nhỏ góc màn hình
+            const notif = document.createElement('div');
+            notif.style.cssText = 'position:fixed;bottom:20px;left:20px;background:#1e3a8a;color:white;padding:12px 20px;border-radius:8px;font-size:14px;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.2);';
+            notif.innerHTML = '🤖 Đang chạy tự động gửi báo cáo...';
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 5000);
+
+            sendEmailBtn.click();
+        }
+    }, 60000); // Check mỗi 60 giây
 });

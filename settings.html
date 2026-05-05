@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cài đặt kênh gửi — FusionGroup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f1f5f9;
+            min-height: 100vh;
+            color: #1e293b;
+        }
+
+        /* ── Header ── */
+        .settings-header {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            padding: 20px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 16px rgba(37,99,235,0.25);
+        }
+        .settings-header h1 {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .settings-header p {
+            color: #bfdbfe;
+            font-size: 13px;
+            margin-top: 3px;
+        }
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 1.5px solid rgba(255,255,255,0.3);
+            padding: 9px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.25); }
+
+        /* ── Content ── */
+        .settings-content {
+            max-width: 760px;
+            margin: 32px auto;
+            padding: 0 20px 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .card-header {
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 14px 20px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-body { padding: 20px; }
+
+        /* ── Auto-send time ── */
+        .time-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: #fffbeb;
+            border: 1.5px solid #fcd34d;
+            border-radius: 10px;
+            padding: 16px 20px;
+            flex-wrap: wrap;
+        }
+        .time-row label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #92400e;
+            white-space: nowrap;
+        }
+        .time-input-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #autoSendTime {
+            padding: 10px 14px;
+            border: 2px solid #2563eb;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            font-family: 'Inter', monospace;
+            color: #1e3a8a;
+            background: #eff6ff;
+            outline: none;
+            width: 140px;
+        }
+        .current-time-display {
+            font-size: 13px;
+            color: #64748b;
+            background: #f1f5f9;
+            padding: 8px 14px;
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+        .current-time-display strong { color: #1e3a8a; }
+
+        /* Auto-send toggle */
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 14px;
+        }
+        .toggle-label { font-size: 14px; font-weight: 500; color: #475569; }
+        .toggle {
+            position: relative;
+            width: 48px;
+            height: 26px;
+            cursor: pointer;
+        }
+        .toggle input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            inset: 0;
+            background: #cbd5e1;
+            border-radius: 26px;
+            transition: 0.3s;
+        }
+        .slider::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+        }
+        .toggle input:checked + .slider { background: #10b981; }
+        .toggle input:checked + .slider::before { transform: translateX(22px); }
+
+        #autoSendStatus {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        .status-on { background: #d1fae5; color: #065f46; }
+        .status-off { background: #fee2e2; color: #991b1b; }
+
+        /* ── Recipients ── */
+        #recipientsTextarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px 14px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Inter', monospace;
+            color: #334155;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.2s;
+            line-height: 1.7;
+        }
+        #recipientsTextarea:focus { border-color: #2563eb; }
+        .help-text {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 6px;
+        }
+
+        /* ── Buttons ── */
+        .btn-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+        .btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 22px;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            color: white;
+            box-shadow: 0 3px 10px rgba(37,99,235,0.3);
+        }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 5px 14px rgba(37,99,235,0.4); }
+        .btn-success {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            box-shadow: 0 3px 10px rgba(16,185,129,0.3);
+        }
+        .btn-success:hover { transform: translateY(-1px); }
+        .btn-outline {
+            background: white;
+            color: #475569;
+            border: 1.5px solid #e2e8f0;
+        }
+        .btn-outline:hover { background: #f8fafc; }
+
+        /* ── Toast ── */
+        #toast {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            background: #1e293b;
+            color: white;
+            padding: 14px 22px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(16px);
+            transition: all 0.3s;
+            z-index: 9999;
+            pointer-events: none;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }
+        #toast.show { opacity: 1; transform: translateY(0); }
+        #toast.success { background: #065f46; }
+        #toast.error { background: #991b1b; }
+    </style>
+</head>
+<body>
+
+<header class="settings-header">
+    <div>
+        <h1>⚙️ Cài đặt kênh gửi báo cáo</h1>
+        <p>System Settings – Daily Sync Report</p>
+    </div>
+    <a href="index.html" class="back-btn">← Về Form Báo Cáo</a>
+</header>
+
+<div class="settings-content">
+
+    <!-- Auto-send time -->
+    <div class="card">
+        <div class="card-header">🕐 Gửi tự động hàng ngày</div>
+        <div class="card-body">
+            <div class="time-row">
+                <label>Giờ gửi tự động hàng ngày <span style="color:#b45309;font-weight:400;">(Daily auto-send time):</span></label>
+                <div class="time-input-wrap">
+                    <input type="time" id="autoSendTime" value="16:30">
+                </div>
+                <div class="current-time-display">
+                    Hiện tại (Current): <strong id="currentTimeDisplay">--:--</strong>
+                </div>
+            </div>
+            <div class="toggle-row">
+                <label class="toggle">
+                    <input type="checkbox" id="autoSendToggle">
+                    <span class="slider"></span>
+                </label>
+                <span class="toggle-label">Bật gửi tự động</span>
+                <span id="autoSendStatus" class="status-off">TẮT</span>
+            </div>
+            <p style="margin-top:12px;font-size:12px;color:#94a3b8;">
+                ⚠️ Tính năng gửi tự động chỉ hoạt động khi trang web đang mở trên trình duyệt. Đảm bảo để tab này mở vào giờ đã hẹn.
+            </p>
+        </div>
+    </div>
+
+    <!-- Recipients -->
+    <div class="card">
+        <div class="card-header">📧 Email người nhận</div>
+        <div class="card-body">
+            <textarea id="recipientsTextarea" placeholder="thanhntp@fusiongroup.vn&#10;trapts@fusiongroup.vn&#10;manager@fusiongroup.vn"></textarea>
+            <p class="help-text">Mỗi email một dòng hoặc cách nhau bằng dấu phẩy</p>
+        </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="btn-row">
+        <button class="btn btn-primary" id="saveAllBtn">💾 Lưu tất cả cài đặt / Save All</button>
+        <button class="btn btn-success" id="testSendBtn">🚀 Test Gửi Ngay / Test Send</button>
+        <a href="index.html" class="btn btn-outline">← Về Form Báo Cáo / Back</a>
+    </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>
+    const STORAGE_KEY = 'fg_recipients';
+    const SCHEDULE_KEY = 'fg_schedule';
+
+    // ── Current time clock ──
+    function updateClock() {
+        const now = new Date();
+        const h = String(now.getHours()).padStart(2, '0');
+        const m = String(now.getMinutes()).padStart(2, '0');
+        const period = now.getHours() >= 12 ? 'chiều' : 'sáng';
+        document.getElementById('currentTimeDisplay').textContent = `${h}:${m} (${period})`;
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // ── Load saved settings ──
+    function loadSettings() {
+        const schedule = JSON.parse(localStorage.getItem(SCHEDULE_KEY) || '{}');
+        const recipients = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+
+        if (schedule.time) document.getElementById('autoSendTime').value = schedule.time;
+        
+        const toggle = document.getElementById('autoSendToggle');
+        toggle.checked = !!schedule.enabled;
+        updateToggleUI(!!schedule.enabled);
+
+        if (recipients.length > 0) {
+            document.getElementById('recipientsTextarea').value = recipients.join('\n');
+        }
+    }
+
+    function updateToggleUI(enabled) {
+        const status = document.getElementById('autoSendStatus');
+        if (enabled) {
+            status.textContent = 'BẬT';
+            status.className = 'status-on';
+        } else {
+            status.textContent = 'TẮT';
+            status.className = 'status-off';
+        }
+    }
+
+    document.getElementById('autoSendToggle').addEventListener('change', function() {
+        updateToggleUI(this.checked);
+    });
+
+    // ── Parse recipients from textarea ──
+    function parseRecipients() {
+        const raw = document.getElementById('recipientsTextarea').value;
+        return raw.split(/[\n,]/).map(e => e.trim()).filter(e => e.includes('@'));
+    }
+
+    // ── Save All ──
+    document.getElementById('saveAllBtn').addEventListener('click', () => {
+        const time = document.getElementById('autoSendTime').value;
+        const enabled = document.getElementById('autoSendToggle').checked;
+        const recipients = parseRecipients();
+
+        if (recipients.length === 0) {
+            showToast('⚠️ Vui lòng nhập ít nhất 1 email người nhận!', 'error');
+            return;
+        }
+
+        localStorage.setItem(SCHEDULE_KEY, JSON.stringify({ time, enabled }));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(recipients));
+
+        showToast(`✅ Đã lưu! ${recipients.length} người nhận | Gửi lúc ${time} | ${enabled ? 'Tự động BẬT' : 'Tự động TẮT'}`, 'success');
+    });
+
+    // ── Test Send ──
+    document.getElementById('testSendBtn').addEventListener('click', async () => {
+        const recipients = parseRecipients();
+        if (recipients.length === 0) {
+            showToast('⚠️ Nhập email người nhận trước!', 'error');
+            return;
+        }
+
+        const btn = document.getElementById('testSendBtn');
+        btn.textContent = '⏳ Đang gửi...';
+        btn.disabled = true;
+
+        try {
+            const config = await fetch('email_config.json').then(r => r.json());
+            emailjs.init(config.emailjs.public_key);
+
+            const now = new Date();
+            const testHTML = `
+                <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#f8fafc;padding:24px;border-radius:12px;">
+                    <div style="background:linear-gradient(135deg,#1e3a8a,#2563eb);padding:24px;border-radius:10px 10px 0 0;text-align:center;">
+                        <h1 style="color:white;margin:0;font-size:20px;">🚀 Test Email — FusionGroup</h1>
+                        <p style="color:#bfdbfe;margin:6px 0 0 0;font-size:13px;">Đây là email test từ hệ thống gửi báo cáo tự động</p>
+                    </div>
+                    <div style="background:white;padding:20px;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 10px 10px;">
+                        <p style="font-size:14px;color:#334155;">✅ Cấu hình EmailJS hoạt động bình thường.</p>
+                        <p style="font-size:13px;color:#64748b;margin-top:8px;">Thời gian gửi test: <strong>${now.toLocaleString('vi-VN')}</strong></p>
+                        <p style="font-size:13px;color:#64748b;">Số người nhận: <strong>${recipients.length}</strong></p>
+                    </div>
+                </div>`;
+
+            await Promise.all(recipients.map(email =>
+                emailjs.send(config.emailjs.service_id, config.emailjs.template_id, {
+                    to_email: email,
+                    to_name: email,
+                    html_message: testHTML,
+                    report_date: now.toLocaleDateString('vi-VN'),
+                    prepared_by: 'System Test',
+                    subject: `[TEST] FusionGroup Daily Report - ${now.toLocaleDateString('vi-VN')}`
+                })
+            ));
+
+            showToast(`✅ Đã gửi test tới ${recipients.length} người!`, 'success');
+        } catch (err) {
+            console.error(err);
+            showToast('❌ Gửi thất bại: ' + (err.text || err.message), 'error');
+        }
+
+        btn.textContent = '🚀 Test Gửi Ngay / Test Send';
+        btn.disabled = false;
+    });
+
+    // ── Toast helper ──
+    function showToast(msg, type = '') {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.className = `show ${type}`;
+        setTimeout(() => { t.className = ''; }, 4000);
+    }
+
+    loadSettings();
+</script>
+</body>
+</html>

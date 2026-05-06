@@ -112,27 +112,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const roasVal = parseFloat(roas.value) || 0;
         const roasStatus = roasVal < 5.5 ? '🔴 Critical (< 5.5)' : '🟢 Healthy';
 
-        let md = `# Daily Report — FusionGroup
-**Date:** ${dateStr} | **Type:** ${typeStr} | **Prepared by:** ${author}
+        let md = `# Báo cáo hàng ngày (Daily Report) — FusionGroup
+**Ngày (Date):** ${dateStr} | **Loại (Type):** ${typeStr} | **Người lập (Prepared by):** ${author}
 
 ---
 
-## 📊 SECTION 1 — PERFORMANCE SUMMARY
-| Metric | Value | Comparison |
+## 📊 SECTION 1 — PERFORMANCE SUMMARY (TÓM TẮT HIỆU SUẤT)
+| Metric (Chỉ số) | Value (Giá trị) | Comparison (So sánh) |
 | :--- | :--- | :--- |
-| **Revenue** | ${revenue.value || '0'} VND | ${revenueVs.value || '-'} |
-| **Ad Spend** | ${adSpend.value || '0'} VND | ${adSpendVs.value || '-'} |
+| **Revenue (Doanh thu)** | ${revenue.value || '0'} VND | ${revenueVs.value || '-'} |
+| **Ad Spend (Chi phí QC)** | ${adSpend.value || '0'} VND | ${adSpendVs.value || '-'} |
 | **ROAS** | **${roasVal.toFixed(2)}** | ${roasStatus} |
-| **Orders** | ${orders.value || '0'} | ${ordersVs.value || '-'} |
-| **CS Response** | ${csResponse.value || '-'} | |
-| **KOC Recruited** | ${kocRecruited.value || '0'} | ${kocNote.value || ''} |
+| **Orders (Số đơn hàng)** | ${orders.value || '0'} | ${ordersVs.value || '-'} |
+| **CS Response (Phản hồi CSKH)** | ${csResponse.value || '-'} | |
+| **KOC Recruited (Số KOC tuyển được)** | ${kocRecruited.value || '0'} | ${kocNote.value || ''} |
 
-**Performance Notes:**
-${perfNotes.value || 'No additional notes.'}
+**Ghi chú hiệu suất (Performance Notes):**
+${perfNotes.value || 'Không có ghi chú thêm.'}
 
 ---
 
-## 🔗 SECTION 2 — CROSS-DEPARTMENT COORDINATION
+## 🔗 SECTION 2 — CROSS-DEPARTMENT COORDINATION (PHỐI HỢP LIÊN PHÒNG BAN)
 - **Media → Marketing / Sales:**
   ${coordMedia.value || 'N/A'}
 - **Marketing → Online Sales:**
@@ -144,7 +144,7 @@ ${perfNotes.value || 'No additional notes.'}
 
 ---
 
-## ✅ SECTION 3 — ACTION ITEMS FOR TOMORROW
+## ✅ SECTION 3 — ACTION ITEMS FOR TOMORROW (HÀNH ĐỘNG CHO NGÀY MAI)
 - **Media Marketing:**
   ${actionMedia.value || 'N/A'}
 - **Marketing (HN / HCM):**
@@ -154,8 +154,8 @@ ${perfNotes.value || 'No additional notes.'}
 - **CS Team:**
   ${actionCS.value || 'N/A'}
 
-**Escalation / Decisions Needed:**
-${managementNotes.value || 'None.'}
+**Vấn đề cần báo cáo / Quyết định (Escalation):**
+${managementNotes.value || 'Không có.'}
 
 ---
 *Report generated via FusionGroup Daily Dashboard*`;
@@ -201,39 +201,39 @@ ${managementNotes.value || 'None.'}
 
         return `<div style="font-family:Arial,sans-serif;max-width:700px;margin:0 auto;background:#f8fafc;">
           <div style="background:linear-gradient(135deg,#1e3a8a,#2563eb);padding:28px 32px;border-radius:12px 12px 0 0;">
-            <h1 style="color:white;margin:0;font-size:22px;">📊 Daily Report — FusionGroup</h1>
-            <p style="color:#bfdbfe;margin:6px 0 0 0;font-size:14px;">📅 ${dateStr} &nbsp;|&nbsp; ${typeStr} &nbsp;|&nbsp; Prepared by: <strong style="color:white;">${author}</strong></p>
+            <h1 style="color:white;margin:0;font-size:22px;">📊 Báo cáo hàng ngày — FusionGroup</h1>
+            <p style="color:#bfdbfe;margin:6px 0 0 0;font-size:14px;">📅 ${dateStr} &nbsp;|&nbsp; ${typeStr} &nbsp;|&nbsp; Người lập (Prepared by): <strong style="color:white;">${author}</strong></p>
           </div>
           <div style="background:#fff;border:1px solid #e2e8f0;padding:24px 32px;">
-            <h2 style="color:#1e3a8a;font-size:15px;border-bottom:2px solid #3b82f6;padding-bottom:8px;margin-top:0;">📊 SECTION 1 — PERFORMANCE SUMMARY</h2>
+            <h2 style="color:#1e3a8a;font-size:15px;border-bottom:2px solid #3b82f6;padding-bottom:8px;margin-top:0;">📊 SECTION 1 — PERFORMANCE SUMMARY (TÓM TẮT HIỆU SUẤT)</h2>
             <table style="width:100%;border-collapse:collapse;margin-top:12px;">
               <thead><tr style="background:#eff6ff;">
-                <th style="text-align:left;padding:10px 12px;color:#1e40af;font-size:13px;border:1px solid #dbeafe;">Metric</th>
-                <th style="text-align:left;padding:10px 12px;color:#1e40af;font-size:13px;border:1px solid #dbeafe;">Value</th>
-                <th style="text-align:left;padding:10px 12px;color:#1e40af;font-size:13px;border:1px solid #dbeafe;">Comparison</th>
+                <th style="text-align:left;padding:10px 12px;color:#1e40af;font-size:13px;border:1px solid #dbeafe;">Metric (Chỉ số)</th>
+                <th style="text-align:left;padding:10px 12px;color:#1e40af;font-size:13px;border:1px solid #dbeafe;">Value (Giá trị)</th>
+                <th style="text-align:left;padding:10px 12px;color:#1e40af;font-size:13px;border:1px solid #dbeafe;">Comparison (So sánh)</th>
               </tr></thead>
               <tbody>
-                <tr><td style="padding:9px 12px;border:1px solid #e2e8f0;font-weight:600;">Revenue</td><td style="padding:9px 12px;border:1px solid #e2e8f0;">${revenue.value || '0'} VND</td><td style="padding:9px 12px;border:1px solid #e2e8f0;">${revenueVs.value || '-'}</td></tr>
-                <tr style="background:#f8fafc;"><td style="padding:9px 12px;border:1px solid #e2e8f0;font-weight:600;">Ad Spend</td><td style="padding:9px 12px;border:1px solid #e2e8f0;">${adSpend.value || '0'} VND</td><td style="padding:9px 12px;border:1px solid #e2e8f0;">${adSpendVs.value || '-'}</td></tr>
+                <tr><td style="padding:9px 12px;border:1px solid #e2e8f0;font-weight:600;">Revenue (Doanh thu)</td><td style="padding:9px 12px;border:1px solid #e2e8f0;">${revenue.value || '0'} VND</td><td style="padding:9px 12px;border:1px solid #e2e8f0;">${revenueVs.value || '-'}</td></tr>
+                <tr style="background:#f8fafc;"><td style="padding:9px 12px;border:1px solid #e2e8f0;font-weight:600;">Ad Spend (Chi phí QC)</td><td style="padding:9px 12px;border:1px solid #e2e8f0;">${adSpend.value || '0'} VND</td><td style="padding:9px 12px;border:1px solid #e2e8f0;">${adSpendVs.value || '-'}</td></tr>
                 <tr><td style="padding:9px 12px;border:1px solid #e2e8f0;font-weight:600;">ROAS</td><td style="padding:9px 12px;border:1px solid #e2e8f0;color:${roasColor};font-weight:700;">${roasVal.toFixed(2)}</td><td style="padding:9px 12px;border:1px solid #e2e8f0;">${roasStatus}</td></tr>
-                <tr style="background:#f8fafc;"><td style="padding:9px 12px;border:1px solid #e2e8f0;font-weight:600;">Orders</td><td style="padding:9px 12px;border:1px solid #e2e8f0;">${orders.value || '0'}</td><td style="padding:9px 12px;border:1px solid #e2e8f0;">${ordersVs.value || '-'}</td></tr>
-                <tr><td style="padding:9px 12px;border:1px solid #e2e8f0;font-weight:600;">CS Response</td><td style="padding:9px 12px;border:1px solid #e2e8f0;">${csResponse.value || '-'}</td><td style="padding:9px 12px;border:1px solid #e2e8f0;"></td></tr>
-                <tr style="background:#f8fafc;"><td style="padding:9px 12px;border:1px solid #e2e8f0;font-weight:600;">KOC Recruited</td><td style="padding:9px 12px;border:1px solid #e2e8f0;">${kocRecruited.value || '0'}</td><td style="padding:9px 12px;border:1px solid #e2e8f0;">${kocNote.value || ''}</td></tr>
+                <tr style="background:#f8fafc;"><td style="padding:9px 12px;border:1px solid #e2e8f0;font-weight:600;">Orders (Số đơn hàng)</td><td style="padding:9px 12px;border:1px solid #e2e8f0;">${orders.value || '0'}</td><td style="padding:9px 12px;border:1px solid #e2e8f0;">${ordersVs.value || '-'}</td></tr>
+                <tr><td style="padding:9px 12px;border:1px solid #e2e8f0;font-weight:600;">CS Response (Phản hồi CSKH)</td><td style="padding:9px 12px;border:1px solid #e2e8f0;">${csResponse.value || '-'}</td><td style="padding:9px 12px;border:1px solid #e2e8f0;"></td></tr>
+                <tr style="background:#f8fafc;"><td style="padding:9px 12px;border:1px solid #e2e8f0;font-weight:600;">KOC Recruited (Số KOC tuyển được)</td><td style="padding:9px 12px;border:1px solid #e2e8f0;">${kocRecruited.value || '0'}</td><td style="padding:9px 12px;border:1px solid #e2e8f0;">${kocNote.value || ''}</td></tr>
               </tbody>
             </table>
             ${perfNotes.value ? `<div style="margin-top:14px;padding:12px 16px;background:#f0f9ff;border-left:4px solid #3b82f6;border-radius:4px;font-size:13px;color:#334155;">${perfNotes.value.replace(/\n/g,'<br>')}</div>` : ''}
           </div>
           <div style="background:#fff;border:1px solid #e2e8f0;border-top:none;padding:24px 32px;">
-            <h2 style="color:#92400e;font-size:15px;border-bottom:2px solid #f59e0b;padding-bottom:8px;margin-top:0;">🔗 SECTION 2 — CROSS-DEPARTMENT COORDINATION</h2>
+            <h2 style="color:#92400e;font-size:15px;border-bottom:2px solid #f59e0b;padding-bottom:8px;margin-top:0;">🔗 SECTION 2 — CROSS-DEPARTMENT COORDINATION (PHỐI HỢP LIÊN PHÒNG BAN)</h2>
             <table style="width:100%;border-collapse:collapse;margin-top:12px;">${coordRows}</table>
           </div>
           <div style="background:#fff;border:1px solid #e2e8f0;border-top:none;padding:24px 32px;">
-            <h2 style="color:#1e3a8a;font-size:15px;border-bottom:2px solid #6366f1;padding-bottom:8px;margin-top:0;">✅ SECTION 3 — ACTION ITEMS FOR TOMORROW</h2>
+            <h2 style="color:#1e3a8a;font-size:15px;border-bottom:2px solid #6366f1;padding-bottom:8px;margin-top:0;">✅ SECTION 3 — ACTION ITEMS FOR TOMORROW (HÀNH ĐỘNG CHO NGÀY MAI)</h2>
             <table style="width:100%;border-collapse:collapse;margin-top:12px;">${actionRows}</table>
             ${managementNotes.value ? `<div style="margin-top:14px;padding:12px 16px;background:#fef3c7;border-left:4px solid #f59e0b;border-radius:4px;font-size:13px;color:#78350f;">${managementNotes.value.replace(/\n/g,'<br>')}</div>` : ''}
           </div>
           <div style="background:#1e3a8a;padding:16px 32px;border-radius:0 0 12px 12px;text-align:center;">
-            <p style="color:#93c5fd;margin:0;font-size:12px;">🤖 Automated report from FusionGroup Daily Dashboard</p>
+            <p style="color:#93c5fd;margin:0;font-size:12px;">🤖 Báo cáo tự động từ FusionGroup Daily Dashboard</p>
           </div>
         </div>`;
     }
@@ -343,7 +343,7 @@ ${managementNotes.value || 'None.'}
             warning.textContent = 'Critical (< 5.5)';
         } else {
             warning.style.color = '#10b981';
-            warning.textContent = 'Healthy (≥ 5.5)';
+            warning.textContent = 'Bình thường (Healthy ≥ 5.5)';
         }
     });
 

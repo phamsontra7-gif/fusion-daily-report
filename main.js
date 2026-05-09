@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dayType = document.getElementById('dayType');
     const preparedBy = document.getElementById('preparedBy');
 
-    // ── Recipients Manager ──────────────────────────────────────
+    // ── Recipients Manager (chỉ chạy trên settings.html) ───────
     const STORAGE_KEY = 'fg_recipients';
     const newRecipientInput = document.getElementById('newRecipientInput');
     const addRecipientBtn = document.getElementById('addRecipientBtn');
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function getRecipients() {
         const stored = localStorage.getItem(STORAGE_KEY);
-        return stored ? JSON.parse(stored) : null; // null = chưa có, sẽ dùng từ config
+        return stored ? JSON.parse(stored) : null;
     }
 
     function saveRecipients(list) {
@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderRecipients(list) {
+        if (!recipientsList) return;
         recipientsList.innerHTML = '';
         if (list.length === 0) {
             recipientsList.innerHTML = '<span style="color:#94a3b8;font-size:13px;">Chưa có email nào. Hãy thêm người nhận.</span>';
@@ -45,6 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function addRecipient() {
+        if (!newRecipientInput) return;
         const email = newRecipientInput.value.trim();
         if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
             newRecipientInput.style.borderColor = '#ef4444';
@@ -63,8 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
         newRecipientInput.focus();
     }
 
-    addRecipientBtn.addEventListener('click', addRecipient);
-    newRecipientInput.addEventListener('keydown', e => { if (e.key === 'Enter') addRecipient(); });
+    if (addRecipientBtn) addRecipientBtn.addEventListener('click', addRecipient);
+    if (newRecipientInput) newRecipientInput.addEventListener('keydown', e => { if (e.key === 'Enter') addRecipient(); });
     // ────────────────────────────────────────────────────────────
 
     // Section 1

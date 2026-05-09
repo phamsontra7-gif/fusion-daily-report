@@ -351,52 +351,46 @@ ${managementNotes.value || 'Không có.'}
         const htmlContent = generateHTML();
         const dateStr = reportDate.value || new Date().toLocaleDateString('vi-VN');
 
-        const printWindow = window.open('', '_blank');
-        printWindow.document.write(`<!DOCTYPE html>
+        // Dùng hidden iframe để tránh popup blocker
+        const iframe = document.createElement('iframe');
+        iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;border:0;';
+        document.body.appendChild(iframe);
+
+        const fullHtml = `<!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
   <title>Báo cáo ngày ${dateStr} — FusionGroup</title>
   <style>
     @page { size: A4; margin: 12mm 14mm; }
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f8fafc; }
-    @media print {
-      body { background: white; }
-      .no-print { display: none !important; }
-    }
-    .print-actions {
-      display: flex; gap: 12px; justify-content: center;
-      padding: 16px; background: #f1f5f9;
-    }
-    .print-actions button {
-      padding: 10px 28px; border: none; border-radius: 8px;
-      font-size: 14px; font-weight: 600; cursor: pointer;
-    }
-    .btn-print { background: #1e3a8a; color: white; }
-    .btn-close { background: #e2e8f0; color: #334155; }
-    .btn-print:hover { background: #1e40af; }
-    .btn-close:hover { background: #cbd5e1; }
+    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: white; }
   </style>
 </head>
-<body>
-  <div class="no-print print-actions">
-    <button class="btn-print" onclick="window.print()">🖨️ In / Tải PDF</button>
-    <button class="btn-close" onclick="window.close()">✕ Đóng</button>
-  </div>
-  ${htmlContent}
-</body>
-</html>`);
-        printWindow.document.close();
+<body>${htmlContent}</body>
+</html>`;
+
+        const iframeDoc = iframe.contentWindow.document;
+        iframeDoc.open();
+        iframeDoc.write(fullHtml);
+        iframeDoc.close();
+
+        iframe.onload = () => {
+            setTimeout(() => {
+                iframe.contentWindow.focus();
+                iframe.contentWindow.print();
+                setTimeout(() => document.body.removeChild(iframe), 2000);
+            }, 300);
+        };
 
         const originalHTML = exportPDFBtn.innerHTML;
-        exportPDFBtn.innerHTML = '<i data-lucide="check"></i> Đã mở PDF!';
-        exportPDFBtn.style.background = '#10b981';
+        exportPDFBtn.innerHTML = '<i data-lucide="loader"></i> Đang chuẩn bị...';
+        exportPDFBtn.style.background = '#f59e0b';
         lucide.createIcons();
         setTimeout(() => {
             exportPDFBtn.innerHTML = originalHTML;
             exportPDFBtn.style.background = '';
             lucide.createIcons();
-        }, 2500);
+        }, 3000);
     });
 
     // Auto-update ROAS warning color

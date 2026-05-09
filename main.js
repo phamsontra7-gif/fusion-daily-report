@@ -351,40 +351,37 @@ ${managementNotes.value || 'Không có.'}
         const htmlContent = generateHTML();
         const dateStr = reportDate.value || new Date().toLocaleDateString('vi-VN');
 
-        // Dùng hidden iframe để tránh popup blocker
-        const iframe = document.createElement('iframe');
-        iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;border:0;';
-        document.body.appendChild(iframe);
+        // Inject nội dung báo cáo vào trang hiện tại
+        const printDiv = document.createElement('div');
+        printDiv.id = 'pdf-print-overlay';
+        printDiv.innerHTML = htmlContent;
+        document.body.appendChild(printDiv);
 
-        const fullHtml = `<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <title>Báo cáo ngày ${dateStr} — FusionGroup</title>
-  <style>
-    @page { size: A4; margin: 12mm 14mm; }
-    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: white; }
-  </style>
-</head>
-<body>${htmlContent}</body>
-</html>`;
+        // CSS chỉ hiện printDiv khi in, ẩn mọi thứ khác
+        const printStyle = document.createElement('style');
+        printStyle.id = 'pdf-print-style';
+        printStyle.textContent = `
+            @media print {
+                body > *:not(#pdf-print-overlay) { display: none !important; }
+                #pdf-print-overlay { display: block !important; }
+            }
+            @page { size: A4; margin: 12mm 14mm; }
+            #pdf-print-overlay { display: none; }
+        `;
+        document.head.appendChild(printStyle);
 
-        const iframeDoc = iframe.contentWindow.document;
-        iframeDoc.open();
-        iframeDoc.write(fullHtml);
-        iframeDoc.close();
-
-        iframe.onload = () => {
+        // Gọi in, sau đó dọn dẹp
+        setTimeout(() => {
+            window.print();
             setTimeout(() => {
-                iframe.contentWindow.focus();
-                iframe.contentWindow.print();
-                setTimeout(() => document.body.removeChild(iframe), 2000);
-            }, 300);
-        };
+                document.body.removeChild(printDiv);
+                document.head.removeChild(printStyle);
+            }, 500);
+        }, 150);
 
         const originalHTML = exportPDFBtn.innerHTML;
-        exportPDFBtn.innerHTML = '<i data-lucide="loader"></i> Đang chuẩn bị...';
-        exportPDFBtn.style.background = '#f59e0b';
+        exportPDFBtn.innerHTML = '<i data-lucide="check"></i> Đang in...';
+        exportPDFBtn.style.background = '#10b981';
         lucide.createIcons();
         setTimeout(() => {
             exportPDFBtn.innerHTML = originalHTML;

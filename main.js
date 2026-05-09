@@ -318,20 +318,55 @@ ${managementNotes.value || 'Không có.'}
 
 
 
-    copyBtn.addEventListener('click', () => {
+    async function copyToClipboard(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+            try {
+                await navigator.clipboard.writeText(text);
+                return true;
+            } catch (err) {
+                console.error('navigator.clipboard failed, trying fallback:', err);
+            }
+        }
+
+        // Fallback for non-secure contexts or failed promise
+        try {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            textArea.style.top = "0";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            const successful = document.execCommand('copy');
+            document.body.removeChild(textArea);
+            return successful;
+        } catch (err) {
+            console.error('Fallback copy failed:', err);
+            return false;
+        }
+    }
+
+    copyBtn.addEventListener('click', async () => {
         const md = generateMarkdown();
-        navigator.clipboard.writeText(md).then(() => {
-            const originalHTML = copyBtn.innerHTML;
+        const success = await copyToClipboard(md);
+        
+        const originalHTML = copyBtn.innerHTML;
+        if (success) {
             copyBtn.innerHTML = '<i data-lucide="check"></i> Copied to Clipboard!';
-            lucide.createIcons();
             copyBtn.style.background = '#10b981';
-            
-            setTimeout(() => {
-                copyBtn.innerHTML = originalHTML;
-                lucide.createIcons();
-                copyBtn.style.background = '';
-            }, 2000);
-        });
+        } else {
+            copyBtn.innerHTML = '<i data-lucide="x"></i> Copy Failed';
+            copyBtn.style.background = '#ef4444';
+        }
+        
+        lucide.createIcons();
+        
+        setTimeout(() => {
+            copyBtn.innerHTML = originalHTML;
+            copyBtn.style.background = '';
+            lucide.createIcons();
+        }, 2000);
     });
 
     // Auto-update ROAS warning color

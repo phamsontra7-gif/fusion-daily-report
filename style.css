@@ -220,6 +220,14 @@ textarea {
     background: #374151 !important;
 }
 
+.pdf-btn {
+    background: linear-gradient(135deg, #059669, #047857) !important;
+}
+
+.pdf-btn:hover {
+    background: linear-gradient(135deg, #047857, #065f46) !important;
+}
+
 .fab-btn {
     background: var(--banner-blue);
     color: white;

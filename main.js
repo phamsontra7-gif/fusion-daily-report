@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const actionCS = document.getElementById('actionCS');
     const managementNotes = document.getElementById('managementNotes');
 
-    const copyBtn = document.getElementById('copyMarkdown');
+    const exportPDFBtn = document.getElementById('exportPDF');
 
     // Set today's date
     const today = new Date().toLocaleDateString('vi-VN');
@@ -347,26 +347,56 @@ ${managementNotes.value || 'Không có.'}
         }
     }
 
-    copyBtn.addEventListener('click', async () => {
-        const md = generateMarkdown();
-        const success = await copyToClipboard(md);
-        
-        const originalHTML = copyBtn.innerHTML;
-        if (success) {
-            copyBtn.innerHTML = '<i data-lucide="check"></i> Copied to Clipboard!';
-            copyBtn.style.background = '#10b981';
-        } else {
-            copyBtn.innerHTML = '<i data-lucide="x"></i> Copy Failed';
-            copyBtn.style.background = '#ef4444';
-        }
-        
+    exportPDFBtn.addEventListener('click', () => {
+        const htmlContent = generateHTML();
+        const dateStr = reportDate.value || new Date().toLocaleDateString('vi-VN');
+
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(`<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Báo cáo ngày ${dateStr} — FusionGroup</title>
+  <style>
+    @page { size: A4; margin: 12mm 14mm; }
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f8fafc; }
+    @media print {
+      body { background: white; }
+      .no-print { display: none !important; }
+    }
+    .print-actions {
+      display: flex; gap: 12px; justify-content: center;
+      padding: 16px; background: #f1f5f9;
+    }
+    .print-actions button {
+      padding: 10px 28px; border: none; border-radius: 8px;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+    .btn-print { background: #1e3a8a; color: white; }
+    .btn-close { background: #e2e8f0; color: #334155; }
+    .btn-print:hover { background: #1e40af; }
+    .btn-close:hover { background: #cbd5e1; }
+  </style>
+</head>
+<body>
+  <div class="no-print print-actions">
+    <button class="btn-print" onclick="window.print()">🖨️ In / Tải PDF</button>
+    <button class="btn-close" onclick="window.close()">✕ Đóng</button>
+  </div>
+  ${htmlContent}
+</body>
+</html>`);
+        printWindow.document.close();
+
+        const originalHTML = exportPDFBtn.innerHTML;
+        exportPDFBtn.innerHTML = '<i data-lucide="check"></i> Đã mở PDF!';
+        exportPDFBtn.style.background = '#10b981';
         lucide.createIcons();
-        
         setTimeout(() => {
-            copyBtn.innerHTML = originalHTML;
-            copyBtn.style.background = '';
+            exportPDFBtn.innerHTML = originalHTML;
+            exportPDFBtn.style.background = '';
             lucide.createIcons();
-        }, 2000);
+        }, 2500);
     });
 
     // Auto-update ROAS warning color

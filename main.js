@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const author = preparedBy.value || 'N/A';
 
         const roasVal = parseFloat(roas.value) || 0;
-        const roasStatus = roasVal < 5.5 ? '🔴 Critical (< 5.5)' : '🟢 Healthy';
+        const roasStatus = roasVal < 10 ? '🔴 Critical (< 10)' : '🟢 Healthy';
 
         let md = `# Báo cáo hàng ngày (Daily Report) — FusionGroup
 **Ngày (Date):** ${dateStr} | **Loại (Type):** ${typeStr} | **Người lập (Prepared by):** ${author}
@@ -172,8 +172,8 @@ ${managementNotes.value || 'Không có.'}
         const typeStr = dayType.value;
         const author = preparedBy.value || 'N/A';
         const roasVal = parseFloat(roas.value) || 0;
-        const roasStatus = roasVal < 5.5 ? '🔴 Critical (< 5.5)' : '🟢 Healthy';
-        const roasColor = roasVal < 5.5 ? '#ef4444' : '#10b981';
+        const roasStatus = roasVal < 10 ? '🔴 Critical (< 10)' : '🟢 Healthy';
+        const roasColor = roasVal < 10 ? '#ef4444' : '#10b981';
 
         const coordRows = [
             ['#3b82f6', 'Media → Marketing / Sales', coordMedia.value],
@@ -396,12 +396,12 @@ ${managementNotes.value || 'Không có.'}
     roas.addEventListener('input', () => {
         const val = parseFloat(roas.value) || 0;
         const warning = document.getElementById('roasWarning');
-        if (val < 5.5) {
+        if (val < 10) {
             warning.style.color = '#ef4444';
-            warning.textContent = 'Critical (< 5.5)';
+            warning.textContent = 'Critical (< 10)';
         } else {
             warning.style.color = '#10b981';
-            warning.textContent = 'Bình thường (Healthy ≥ 5.5)';
+            warning.textContent = 'Bình thường (Healthy ≥ 10)';
         }
     });
 
